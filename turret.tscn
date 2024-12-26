@@ -1,0 +1,136 @@
+[gd_scene load_steps=20 format=3 uid="uid://l87auxx0eo2v"]
+
+[ext_resource type="Script" path="res://turret.gd" id="1_rs7q6"]
+[ext_resource type="Texture2D" uid="uid://krjfsesehas6" path="res://Art/turret.png" id="2_28qei"]
+[ext_resource type="Texture2D" uid="uid://upbf26l7bcjv" path="res://Art/large_explosion.png" id="3_6hiuv"]
+[ext_resource type="AudioStream" uid="uid://ci2cm1abgw2r6" path="res://audio/laserShoot.wav" id="4_kyhll"]
+[ext_resource type="AudioStream" uid="uid://dqhbuut3ber0r" path="res://audio/explosion.wav" id="5_8r0ts"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6s8yx"]
+atlas = ExtResource("2_28qei")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6mu8f"]
+atlas = ExtResource("2_28qei")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eog76"]
+atlas = ExtResource("2_28qei")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_khtf2"]
+atlas = ExtResource("2_28qei")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dy7yj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6s8yx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6mu8f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eog76")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_khtf2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 0.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4c3bp"]
+radius = 16.0312
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3m0df"]
+size = Vector2(8, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rswob"]
+atlas = ExtResource("3_6hiuv")
+region = Rect2(0, 0, 45, 45)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oscaw"]
+atlas = ExtResource("3_6hiuv")
+region = Rect2(45, 0, 45, 45)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mn88j"]
+atlas = ExtResource("3_6hiuv")
+region = Rect2(90, 0, 45, 45)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vibm6"]
+atlas = ExtResource("3_6hiuv")
+region = Rect2(135, 0, 45, 45)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qolvs"]
+atlas = ExtResource("3_6hiuv")
+region = Rect2(180, 0, 45, 45)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qvuvf"]
+atlas = ExtResource("3_6hiuv")
+region = Rect2(225, 0, 45, 45)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_d11qa"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rswob")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oscaw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mn88j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vibm6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qolvs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qvuvf")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"default",
+"speed": 24.0
+}]
+
+[node name="Turret" type="StaticBody2D" groups=["cleanable", "damageable", "turret"]]
+script = ExtResource("1_rs7q6")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_dy7yj")
+
+[node name="BodyShape" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_4c3bp")
+
+[node name="GunShape" type="CollisionShape2D" parent="."]
+position = Vector2(20, -0.5)
+shape = SubResource("RectangleShape2D_3m0df")
+
+[node name="CooldownTimer" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+
+[node name="Explosion" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_d11qa")
+
+[node name="ShootSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_kyhll")
+max_distance = 600.0
+attenuation = 3.03143
+
+[node name="ExplosionSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_8r0ts")
+max_distance = 500.0
+
+[connection signal="timeout" from="CooldownTimer" to="." method="_on_cooldown_timer_timeout"]

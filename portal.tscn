@@ -1,0 +1,93 @@
+[gd_scene load_steps=14 format=3 uid="uid://cw6rxmd0cy6le"]
+
+[ext_resource type="Script" path="res://portal.gd" id="1_5sc28"]
+[ext_resource type="Texture2D" uid="uid://ck5y0hmbryrju" path="res://Art/portal.png" id="1_x8auh"]
+[ext_resource type="Shader" path="res://shaders/hsv_augment.gdshader" id="2_0arxy"]
+[ext_resource type="AudioStream" uid="uid://blil5lhgiaxmj" path="res://audio/portal.wav" id="3_amlj5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gl4sv"]
+shader = ExtResource("2_0arxy")
+shader_parameter/hue = 0.5
+shader_parameter/sat = 0.901
+shader_parameter/active = false
+shader_parameter/transparent = false
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tnlkf"]
+atlas = ExtResource("1_x8auh")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u4psf"]
+atlas = ExtResource("1_x8auh")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1o8pk"]
+atlas = ExtResource("1_x8auh")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_luu10"]
+atlas = ExtResource("1_x8auh")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q7nkp"]
+atlas = ExtResource("1_x8auh")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_es34s"]
+atlas = ExtResource("1_x8auh")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ivi0p"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tnlkf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u4psf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1o8pk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_luu10")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q7nkp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_es34s")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cpx7a"]
+radius = 1.0
+height = 6.0
+
+[node name="Portal" type="Area2D"]
+script = ExtResource("1_5sc28")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = -2
+texture_filter = 1
+material = SubResource("ShaderMaterial_gl4sv")
+sprite_frames = SubResource("SpriteFrames_ivi0p")
+frame_progress = 0.240746
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 2)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_cpx7a")
+
+[node name="NoRepeatAssurance" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="WarpSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_amlj5")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="NoRepeatAssurance" to="." method="_on_no_repeat_assurance_timeout"]

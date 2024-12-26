@@ -1,0 +1,76 @@
+[gd_scene load_steps=12 format=3 uid="uid://cwhgrscj2uy82"]
+
+[ext_resource type="Script" path="res://fire_ball.gd" id="1_gugkn"]
+[ext_resource type="Texture2D" uid="uid://by6inn75ctxd0" path="res://Art/fireball.png" id="2_vvgu6"]
+[ext_resource type="Texture2D" uid="uid://d3a6wfa6a3oc0" path="res://Art/small_explosion.png" id="3_rwxof"]
+[ext_resource type="AudioStream" uid="uid://catx4mm21fntg" path="res://audio/little_explosion(1).wav" id="4_22pyd"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_23jv1"]
+radius = 6.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6rvk3"]
+atlas = ExtResource("3_rwxof")
+region = Rect2(0, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_neweu"]
+atlas = ExtResource("3_rwxof")
+region = Rect2(20, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ndhli"]
+atlas = ExtResource("3_rwxof")
+region = Rect2(40, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_il7ai"]
+atlas = ExtResource("3_rwxof")
+region = Rect2(60, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t0x7s"]
+atlas = ExtResource("3_rwxof")
+region = Rect2(80, 0, 20, 20)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tb1jm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6rvk3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_neweu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ndhli")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_il7ai")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t0x7s")
+}],
+"loop": false,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="FireBall" type="Area2D" groups=["cleanable"]]
+texture_filter = 1
+position = Vector2(224, 131)
+script = ExtResource("1_gugkn")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 10
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_vvgu6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_23jv1")
+
+[node name="Explosion" type="AnimatedSprite2D" parent="."]
+z_index = 4
+sprite_frames = SubResource("SpriteFrames_tb1jm")
+
+[node name="LittleExplosionSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_22pyd")
+max_distance = 100.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

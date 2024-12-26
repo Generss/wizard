@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=3 uid="uid://dh7mjcajvs7yl"]
+
+[ext_resource type="Script" path="res://victory_screen.gd" id="1_vxum3"]
+[ext_resource type="FontFile" uid="uid://b0evhrfkywnhn" path="res://Fonts/Methrock.otf" id="1_yj7jw"]
+[ext_resource type="Script" path="res://label.gd" id="2_w1a1d"]
+[ext_resource type="AudioStream" uid="uid://c7l36gka7jddd" path="res://audio/text_sound (2).wav" id="4_laaff"]
+
+[node name="VictoryScreen" type="Node"]
+script = ExtResource("1_vxum3")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Line1" type="RichTextLabel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -296.0
+offset_top = -164.0
+offset_right = 304.0
+offset_bottom = 164.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+theme_override_fonts/normal_font = ExtResource("1_yj7jw")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "YOU HAVE FOUND FREEDOM... 
+You have found the exit
+Aboveground in the cool air of this desert planet,
+you breathe free
+
+However, there is little time for rest
+FOR YOU MUST MAKE PLANS
+
+[shake]TO TAKE VENGENCE ON THEM ALL![/shake]"
+scroll_active = false
+visible_characters_behavior = 1
+script = ExtResource("2_w1a1d")
+
+[node name="TypewriterTimer" type="Timer" parent="."]
+wait_time = 0.05
+
+[node name="TextSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_laaff")
+
+[connection signal="finished_line" from="Line1" to="." method="_on_line_1_finished_line"]
+[connection signal="timeout" from="TypewriterTimer" to="Line1" method="_on_typewriter_timer_timeout"]

@@ -1,0 +1,131 @@
+[gd_scene load_steps=19 format=3 uid="uid://cpq6piv00e7vf"]
+
+[ext_resource type="Script" path="res://title_screen.gd" id="1_pt4c4"]
+[ext_resource type="Texture2D" uid="uid://cg5ubwf3o6uap" path="res://Art/opening_animation.png" id="2_houdv"]
+[ext_resource type="FontFile" uid="uid://baf1lkmiojrj8" path="res://Fonts/Iomanoid.otf" id="3_4a6pw"]
+[ext_resource type="FontFile" uid="uid://b0evhrfkywnhn" path="res://Fonts/Methrock.otf" id="4_chnyq"]
+[ext_resource type="Script" path="res://title.gd" id="4_ctv35"]
+[ext_resource type="Script" path="res://start_button.gd" id="6_y7rhe"]
+[ext_resource type="AudioStream" uid="uid://bm6ybk5xwb8k0" path="res://audio/opening_voice.mp3" id="7_nr1dy"]
+[ext_resource type="AudioStream" uid="uid://bimnv67axc3hk" path="res://audio/opening_voice_2.mp3" id="8_ynb05"]
+[ext_resource type="AudioStream" uid="uid://dai8qkiemk6nc" path="res://audio/thunder.mp3" id="9_7452q"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1aqs6"]
+atlas = ExtResource("2_houdv")
+region = Rect2(0, 0, 640, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g2noy"]
+atlas = ExtResource("2_houdv")
+region = Rect2(4480, 0, 640, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jv6ap"]
+atlas = ExtResource("2_houdv")
+region = Rect2(640, 0, 640, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pw7f6"]
+atlas = ExtResource("2_houdv")
+region = Rect2(1280, 0, 640, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nkp6y"]
+atlas = ExtResource("2_houdv")
+region = Rect2(1920, 0, 640, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_27u21"]
+atlas = ExtResource("2_houdv")
+region = Rect2(2560, 0, 640, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_65lmd"]
+atlas = ExtResource("2_houdv")
+region = Rect2(3200, 0, 640, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1y2e2"]
+atlas = ExtResource("2_houdv")
+region = Rect2(3840, 0, 640, 360)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_s1nxi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1aqs6")
+}],
+"loop": true,
+"name": &"begin",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g2noy")
+}],
+"loop": true,
+"name": &"end",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jv6ap")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pw7f6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nkp6y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_27u21")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_65lmd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1y2e2")
+}],
+"loop": false,
+"name": &"middle",
+"speed": 12.0
+}]
+
+[node name="TitleScreen" type="Node"]
+script = ExtResource("1_pt4c4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(320, 180)
+sprite_frames = SubResource("SpriteFrames_s1nxi")
+animation = &"middle"
+
+[node name="Title" type="Label" parent="."]
+offset_left = 393.0
+offset_top = 75.0
+offset_right = 613.0
+offset_bottom = 162.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_4a6pw")
+theme_override_font_sizes/font_size = 72
+text = "WIZARD"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("4_ctv35")
+
+[node name="StartButton" type="Button" parent="."]
+offset_left = 427.0
+offset_top = 176.0
+offset_right = 570.0
+offset_bottom = 230.0
+theme_override_fonts/font = ExtResource("4_chnyq")
+theme_override_font_sizes/font_size = 48
+text = "START"
+script = ExtResource("6_y7rhe")
+
+[node name="OpeningVoice" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_nr1dy")
+bus = &"Voice"
+
+[node name="OpeningVoice2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_ynb05")
+bus = &"Voice"
+
+[node name="Thunder" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_7452q")
+volume_db = -10.0
+pitch_scale = 0.95
+
+[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]

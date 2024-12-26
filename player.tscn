@@ -1,0 +1,139 @@
+[gd_scene load_steps=20 format=3 uid="uid://c474lcei5u4ix"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_68dt1"]
+[ext_resource type="Texture2D" uid="uid://cqmvmn3mu01ge" path="res://Art/wizard_legs.png" id="1_uqa2s"]
+[ext_resource type="PackedScene" uid="uid://cwhgrscj2uy82" path="res://fire_ball.tscn" id="2_7cmub"]
+[ext_resource type="Texture2D" uid="uid://dnkviss1ycpap" path="res://Art/wizard_body.png" id="2_hb12j"]
+[ext_resource type="Shader" path="res://shaders/hsv_augment.gdshader" id="4_nwsgn"]
+[ext_resource type="AudioStream" uid="uid://b1qmdbtqugn0l" path="res://audio/fire.wav" id="5_joyf0"]
+[ext_resource type="AudioStream" uid="uid://bfy1aihb2b6qk" path="res://audio/hitHurt.wav" id="7_j0sdk"]
+[ext_resource type="Texture2D" uid="uid://v0cctyqiggm1" path="res://Art/arrow.png" id="8_kdlnn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ahj87"]
+shader = ExtResource("4_nwsgn")
+shader_parameter/hue = null
+shader_parameter/sat = 0.8
+shader_parameter/active = false
+shader_parameter/transparent = false
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4wq2y"]
+atlas = ExtResource("1_uqa2s")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_07p6b"]
+atlas = ExtResource("1_uqa2s")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0uu63"]
+atlas = ExtResource("1_uqa2s")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fhdb6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4wq2y")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_07p6b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0uu63")
+}],
+"loop": true,
+"name": &"walking",
+"speed": 5.0
+}]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fslhf"]
+shader = ExtResource("4_nwsgn")
+shader_parameter/hue = 4.75e-08
+shader_parameter/sat = 0.8
+shader_parameter/active = false
+shader_parameter/transparent = false
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8lomw"]
+atlas = ExtResource("2_hb12j")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_01idv"]
+atlas = ExtResource("2_hb12j")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tu84k"]
+atlas = ExtResource("2_hb12j")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qvgsw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8lomw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_01idv")
+}],
+"loop": true,
+"name": &"blasting",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tu84k")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7115d"]
+radius = 13.0384
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+position = Vector2(322, 250)
+script = ExtResource("1_68dt1")
+projectile = ExtResource("2_7cmub")
+metadata/_edit_group_ = true
+
+[node name="Legs" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+material = SubResource("ShaderMaterial_ahj87")
+sprite_frames = SubResource("SpriteFrames_fhdb6")
+animation = &"idle"
+
+[node name="Body" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+material = SubResource("ShaderMaterial_fslhf")
+sprite_frames = SubResource("SpriteFrames_qvgsw")
+animation = &"blasting"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_7115d")
+
+[node name="FireTimer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true
+
+[node name="FireSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_joyf0")
+
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+current = true
+
+[node name="HurtSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_j0sdk")
+
+[node name="FlickerTimer" type="Timer" parent="."]
+wait_time = 0.05
+
+[node name="ArrowSprite" type="Sprite2D" parent="."]
+z_index = 3
+texture = ExtResource("8_kdlnn")
+
+[connection signal="timeout" from="FireTimer" to="." method="_on_fire_timer_timeout"]
+[connection signal="timeout" from="FlickerTimer" to="." method="_on_flicker_timer_timeout"]
